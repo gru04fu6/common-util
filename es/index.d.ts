@@ -1,2 +1,3 @@
 import lineClamp from './line-clamp';
-export { lineClamp };
+import lazyLoad from './lazy-load';
+export { lineClamp, lazyLoad };
