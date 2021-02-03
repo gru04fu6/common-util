@@ -1,7 +1,7 @@
 {
   "name": "common-util",
   "private": true,
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "常用工具",
   "license": "MIT",
   "scripts": {
@@ -25,10 +25,14 @@
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-typescript": "^7.12.7",
     "@rollup/plugin-node-resolve": "^11.1.0",
+    "@typescript-eslint/eslint-plugin": "^4.14.2",
+    "@typescript-eslint/parser": "^4.14.2",
     "babel-jest": "^26.6.3",
     "babel-loader": "^8.2.2",
     "babel-plugin-lodash": "^3.3.4",
     "babel-plugin-module-resolver": "^4.1.0",
+    "eslint": "^7.19.0",
+    "eslint-plugin-import": "^2.22.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.38.0",
     "rollup-plugin-css-only": "^3.1.0",

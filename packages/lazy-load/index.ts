@@ -184,4 +184,4 @@ function lazyLoadFactory(params: {
     };
 }
 
-export default lazyLoadFactory
+export default lazyLoadFactory;

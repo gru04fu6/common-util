@@ -49,8 +49,7 @@ mkdir -p "$DIRNAME"
 # </style>
 # EOF
 
-cat <<EOF >"$DIRNAME/index.ts"
-
+cat > $DIRNAME/index.ts <<EOF
 const ${NAME} = {};
 
 export default ${NAME};

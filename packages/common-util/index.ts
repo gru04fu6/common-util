@@ -4,4 +4,4 @@ import lazyLoad from '@common-util/lazy-load';
 export {
     lineClamp,
     lazyLoad
-}
+};
