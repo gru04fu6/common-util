@@ -1,11 +1,12 @@
 {
   "name": "common-util",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "常用工具",
   "license": "MIT",
   "scripts": {
     "test": "jest",
+    "gen": "bash ./scripts/gc.sh",
     "bootstrap": "yarn --frozen-lockfile && npx lerna bootstrap",
     "clean:lib": "rimraf lib && rimraf es",
     "build:lib": "webpack --config ./build/webpack.config.js",
