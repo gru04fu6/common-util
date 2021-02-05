@@ -2,8 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import Rollup from 'rollup';
 
-const { nodeResolve } = require('@rollup/plugin-node-resolve');
-const typescript = require('rollup-plugin-typescript2');
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import typescript from 'rollup-plugin-typescript2';
+import commonjs from '@rollup/plugin-commonjs';
 
 import type { Express } from 'express';
 
@@ -41,14 +42,8 @@ async function bundleConfigFile(
     const bundle = await rollup.rollup({
         plugins: [
             nodeResolve(),
-            typescript({
-                tsconfigOverride: {
-                    compilerOptions: {
-                        declaration: false
-                    }
-                },
-                abortOnError: false
-            })
+            commonjs(),
+            typescript()
         ],
         external: (id: string) =>
             (id[0] !== '.' && !path.isAbsolute(id)) ||

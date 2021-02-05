@@ -1,5 +1,8 @@
 import fs from 'fs';
 import path from 'path';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import typescript from 'rollup-plugin-typescript2';
+import commonjs from '@rollup/plugin-commonjs';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -26,7 +29,6 @@ function __awaiter(thisArg, _arguments, P, generator) {
     });
 }
 
-const { nodeResolve } = require('@rollup/plugin-node-resolve');
 function debug(...str) {
 }
 function bundleConfigFile(fileName) {
@@ -35,7 +37,9 @@ function bundleConfigFile(fileName) {
         // node-resolve must be imported since it's bundled
         const bundle = yield rollup.rollup({
             plugins: [
-                nodeResolve()
+                nodeResolve(),
+                commonjs(),
+                typescript()
             ],
             external: (id) => (id[0] !== '.' && !path.isAbsolute(id)) ||
                 id.slice(-5, id.length) === '.json',
