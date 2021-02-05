@@ -7,7 +7,6 @@ import typescript from 'rollup-plugin-typescript2';
 import commonjs from '@rollup/plugin-commonjs';
 
 import type { Express } from 'express';
-
 interface NodeModuleWithCompile extends NodeModule {
     _compile(code: string, filename: string): any
 }
@@ -43,7 +42,9 @@ async function bundleConfigFile(
         plugins: [
             nodeResolve(),
             commonjs(),
-            typescript()
+            typescript({
+                tsconfig: './packages/mock-server/tsconfig.json'
+            })
         ],
         external: (id: string) =>
             (id[0] !== '.' && !path.isAbsolute(id)) ||
