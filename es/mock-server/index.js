@@ -39,9 +39,7 @@ function bundleConfigFile(fileName) {
             plugins: [
                 nodeResolve(),
                 commonjs(),
-                typescript({
-                    tsconfig: './packages/mock-server/tsconfig.json'
-                })
+                typescript()
             ],
             external: (id) => (id[0] !== '.' && !path.isAbsolute(id)) ||
                 id.slice(-5, id.length) === '.json',
