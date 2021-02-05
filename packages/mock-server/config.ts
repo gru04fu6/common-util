@@ -42,9 +42,7 @@ async function bundleConfigFile(
         plugins: [
             nodeResolve(),
             commonjs(),
-            typescript({
-                tsconfig: './packages/mock-server/tsconfig.json'
-            })
+            typescript()
         ],
         external: (id: string) =>
             (id[0] !== '.' && !path.isAbsolute(id)) ||
