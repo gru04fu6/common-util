@@ -7,17 +7,10 @@ import typescript from 'rollup-plugin-typescript2';
 import commonjs from '@rollup/plugin-commonjs';
 
 import type { Express } from 'express';
+import type { RegisterRouterFunction } from './registerRouter';
 interface NodeModuleWithCompile extends NodeModule {
     _compile(code: string, filename: string): any
 }
-
-export type RegisterRouterFunction = (param: {
-    method?: 'get' | 'delete' | 'put' | 'post';
-    path: string;
-    reqHandler: (req: any) => any;
-    time?: number
-}) => void;
-
 export interface UserConfig {
     port: number;
     settingServer?: (server: Express) => void;

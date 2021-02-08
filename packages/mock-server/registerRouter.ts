@@ -1,5 +1,12 @@
 import type { Router } from 'express';
 
+export type RegisterRouterFunction = (param: {
+    method?: 'get' | 'delete' | 'put' | 'post';
+    path: string;
+    reqHandler: (req: any) => any;
+    time?: number
+}) => void;
+
 function registerRouterFactory(router: Router) {
     /**
      * 呼叫 API 方法
@@ -8,16 +15,11 @@ function registerRouterFactory(router: Router) {
      * @param  {Object} json 回傳的 json 物件
      * @param  {Number} time 模擬回傳的時間
      */
-    const registerRouter = ({
+    const registerRouter: RegisterRouterFunction = ({
         method = 'get',
         path,
         reqHandler,
         time = 800
-    }: {
-        method?: 'get' | 'delete' | 'put' | 'post';
-        path: string;
-        reqHandler: (req: any) => any;
-        time?: number
     }) => {
         const func = (req: any, res: any) => {
             console.log(req.url);
@@ -27,6 +29,7 @@ function registerRouterFactory(router: Router) {
         };
         router[method](path, func);
     };
+
     return registerRouter;
 }
 

@@ -1,10 +1,5 @@
 import type { Express } from 'express';
-export declare type RegisterRouterFunction = (param: {
-    method?: 'get' | 'delete' | 'put' | 'post';
-    path: string;
-    reqHandler: (req: any) => any;
-    time?: number;
-}) => void;
+import type { RegisterRouterFunction } from './registerRouter';
 export interface UserConfig {
     port: number;
     settingServer?: (server: Express) => void;

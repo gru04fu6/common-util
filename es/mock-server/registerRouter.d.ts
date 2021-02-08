@@ -1,8 +1,9 @@
 import type { Router } from 'express';
-declare function registerRouterFactory(router: Router): ({ method, path, reqHandler, time }: {
+export declare type RegisterRouterFunction = (param: {
     method?: 'get' | 'delete' | 'put' | 'post';
     path: string;
     reqHandler: (req: any) => any;
     time?: number;
 }) => void;
+declare function registerRouterFactory(router: Router): RegisterRouterFunction;
 export default registerRouterFactory;

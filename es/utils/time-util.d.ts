@@ -1,14 +1,14 @@
 /**
  * 格式化日期(本地時間) 2017-05-05 - 07:07:07
  * @param {Object} timeObj 時間物件
- * @param {Boolean} format 格式化方式 目前僅支援 YYYY(年)、MM(月)、DD(日)、HH(時)、mm(分)、ss(秒) `default: 'YYYY-MM-DD - HH:mm:ss'`
+ * @param {Boolean} format 格式化方式 目前僅支援 YYYY(年)、MM(月)、DD(日)、HH(時)、mm(分)、ss(秒) `default: 'YYYY-MM-DD HH:mm:ss'`
  * @return {String} 時間字串
  */
 export declare function formatTime(timeObj: Date, format?: string): string;
 /**
  * 格式化日期(0時區時間) 2017-05-05 - 07:07:07
  * @param {Object} timeObj 時間物件
- * @param {Boolean} format 格式化方式 目前僅支援 YYYY(年)、MM(月)、DD(日)、HH(時)、mm(分)、ss(秒) `default: 'YYYY-MM-DD - HH:mm:ss'`
+ * @param {Boolean} format 格式化方式 目前僅支援 YYYY(年)、MM(月)、DD(日)、HH(時)、mm(分)、ss(秒) `default: 'YYYY-MM-DD HH:mm:ss'`
  * @return {String} 時間字串
  */
 export declare function formatUTCTime(timeObj: Date, format?: string): string;
