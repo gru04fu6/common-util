@@ -17,6 +17,9 @@ yarn build:lib
 # node .build/build.js command
 find './packages' -type d -mindepth 1 -maxdepth 1 ! -name '*util*' ! -name '__mocks__' ! -name 'locale' ! -name 'theme*' -print0 | xargs -I {} -P2 -0 node ./build/build.comps.js {}
 
+find ./packages/utils -type f ! -name '*.test.ts' ! -name 'package.json' -print0 \
+| xargs -P2 -0 -I {} node ./build/build-util.js {}
+
 node ./build/build.entry.js
 
 # Post build clean up

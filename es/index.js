@@ -1,2 +1,10 @@
 export { default as lineClamp } from './line-clamp';
 export { default as lazyLoad } from './lazy-load';
+import * as numberUtil from './utils/number-util';
+export { numberUtil };
+import * as timeUtil from './utils/time-util';
+export { timeUtil };
+import * as objectUtil from './utils/object-util';
+export { objectUtil };
+import * as factoryUtil from './utils/factory-util';
+export { factoryUtil };

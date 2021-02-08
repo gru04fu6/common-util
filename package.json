@@ -1,7 +1,7 @@
 {
   "name": "common-util",
   "private": true,
-  "version": "0.0.9",
+  "version": "0.0.13",
   "description": "常用工具",
   "license": "MIT",
   "bin": {
@@ -25,6 +25,7 @@
     "@rollup/plugin-node-resolve": "^11.1.0",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
+    "ramda": "^0.27.1",
     "rollup": "^2.38.0",
     "rollup-plugin-typescript2": "^0.29.0"
   },
@@ -37,6 +38,7 @@
     "@types/body-parser": "^1.19.0",
     "@types/express": "^4.17.11",
     "@types/node": "^14.14.24",
+    "@types/ramda": "^0.27.36",
     "@typescript-eslint/eslint-plugin": "^4.14.2",
     "@typescript-eslint/parser": "^4.14.2",
     "babel-jest": "^26.6.3",
@@ -57,6 +59,7 @@
     "@rollup/plugin-node-resolve": "^11.1.0",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
+    "ramda": "^0.27.1",
     "rollup": "^2.38.0",
     "rollup-plugin-typescript2": "^0.29.0"
   },
