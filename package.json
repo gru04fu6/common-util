@@ -1,7 +1,7 @@
 {
   "name": "common-util",
   "private": true,
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "常用工具",
   "license": "MIT",
   "bin": {
@@ -24,6 +24,7 @@
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-node-resolve": "^11.1.0",
     "body-parser": "^1.19.0",
+    "chokidar": "^3.5.1",
     "express": "^4.17.1",
     "ramda": "^0.27.1",
     "rollup": "^2.38.0",
@@ -58,6 +59,7 @@
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-node-resolve": "^11.1.0",
     "body-parser": "^1.19.0",
+    "chokidar": "^3.5.1",
     "express": "^4.17.1",
     "ramda": "^0.27.1",
     "rollup": "^2.38.0",

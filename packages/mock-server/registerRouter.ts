@@ -21,13 +21,12 @@ function registerRouterFactory(router: Router) {
         reqHandler,
         time = 800
     }) => {
-        const func = (req: any, res: any) => {
+        router[method](path, (req, res) => {
             console.log(req.url);
             setTimeout(() => {
                 res.json(reqHandler.bind({}, req)());
             }, time);
-        };
-        router[method](path, func);
+        });
     };
 
     return registerRouter;

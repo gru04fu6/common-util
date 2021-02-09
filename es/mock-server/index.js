@@ -3,6 +3,9 @@ import path from 'path';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import typescript from 'rollup-plugin-typescript2';
 import commonjs from '@rollup/plugin-commonjs';
+import express from 'express';
+import bodyParser from 'body-parser';
+import chokidar from 'chokidar';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -149,52 +152,87 @@ function registerRouterFactory(router) {
      * @param  {Number} time 模擬回傳的時間
      */
     const registerRouter = ({ method = 'get', path, reqHandler, time = 800 }) => {
-        const func = (req, res) => {
+        router[method](path, (req, res) => {
             console.log(req.url);
             setTimeout(() => {
                 res.json(reqHandler.bind({}, req)());
             }, time);
-        };
-        router[method](path, func);
+        });
     };
     return registerRouter;
 }
 
-const express = require('express');
-const bodyParser = require('body-parser');
+let server;
+let lock = false;
+function loadConfig() {
+    return resolveConfig({
+        port: 3000
+    });
+}
+function startWatch(watchFolder = './mock') {
+    const configRoot = process.cwd();
+    let rootFolder = path.resolve(configRoot, watchFolder);
+    const watcher = chokidar.watch([
+        path.resolve(configRoot, 'mock-server.config.js'),
+        path.resolve(configRoot, 'mock-server.config.ts'),
+        rootFolder
+    ]);
+    console.log(`watch file on folder: ${rootFolder}`);
+    watcher.on('ready', function () {
+        watcher.on('all', function () {
+            if (!lock) {
+                console.log('restart mock server');
+                lock = true;
+                server.close(() => __awaiter(this, void 0, void 0, function* () {
+                    const config = yield loadConfig();
+                    startApp(config);
+                    lock = false;
+                }));
+            }
+        });
+    });
+}
+function startApp(config) {
+    const MockServer = express();
+    MockServer.set('port', config.port);
+    MockServer.use((req, res, next) => {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Headers', '*');
+        res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS');
+        res.set('Connection', 'close');
+        next();
+    });
+    MockServer.use(bodyParser.urlencoded({
+        extended: true,
+        parameterLimit: 10000,
+        limit: 1024 * 1024 * 10
+    }));
+    MockServer.use(bodyParser.json());
+    if (config.settingServer) {
+        config.settingServer(MockServer);
+    }
+    const routes = express.Router();
+    if (config.registerRouter) {
+        config.registerRouter(registerRouterFactory(routes));
+    }
+    else {
+        routes.get('/example', (req, res, next) => setTimeout(() => {
+            res.json({ data: 'example data' });
+            next();
+        }, 200));
+    }
+    MockServer.use('/', function (req, res, next) {
+        routes(req, res, next);
+    });
+    server = MockServer.listen(MockServer.get('port'), () => {
+        console.log(`Mock server is running at http://localhost:${MockServer.get('port')}`);
+    });
+}
 function cli() {
     return __awaiter(this, void 0, void 0, function* () {
-        const config = yield resolveConfig({
-            port: 3000
-        });
-        const MockServer = express();
-        MockServer.set('port', config.port);
-        MockServer.use((req, res, next) => {
-            res.header('Access-Control-Allow-Origin', '*');
-            res.header('Access-Control-Allow-Headers', '*');
-            res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS');
-            next();
-        });
-        MockServer.use(bodyParser.urlencoded({
-            extended: true,
-            parameterLimit: 10000,
-            limit: 1024 * 1024 * 10
-        }));
-        MockServer.use(bodyParser.json());
-        if (config.settingServer) {
-            config.settingServer(MockServer);
-        }
-        const routes = express.Router();
-        if (config.registerRouter) {
-            config.registerRouter(registerRouterFactory(routes));
-        }
-        else {
-            routes.get('/example', (req, res) => setTimeout(() => res.json({ data: 'example data' }), 200));
-        }
-        MockServer.use('/', routes);
-        MockServer.listen(MockServer.get('port'), () => {
-            console.log(`Mock server is running at http://localhost:${MockServer.get('port')}`);
-        });
+        const config = yield loadConfig();
+        startApp(config);
+        startWatch(config.watchDir);
     });
 }
 
