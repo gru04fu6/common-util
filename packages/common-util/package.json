@@ -6,6 +6,7 @@
   "dependencies": {
     "@common-util/line-clamp": "^0.0.0",
     "@common-util/lazy-load": "^0.0.0",
+    "@common-util/tap-event": "^0.0.0",
     "@common-util/utils": "^0.0.0"
   }
 }

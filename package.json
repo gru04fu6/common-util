@@ -1,7 +1,7 @@
 {
   "name": "common-util",
   "private": true,
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "常用工具",
   "license": "MIT",
   "bin": {

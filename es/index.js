@@ -1,5 +1,7 @@
 export { default as lineClamp } from './line-clamp';
 export { default as lazyLoad } from './lazy-load';
+import * as tapEvent from './tap-event';
+export { tapEvent };
 import * as numberUtil from './utils/number-util';
 export { numberUtil };
 import * as timeUtil from './utils/time-util';
