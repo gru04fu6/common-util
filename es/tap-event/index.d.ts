@@ -13,4 +13,4 @@ export interface Modifiers {
     once?: boolean;
 }
 export declare function bindTap(el: HTMLElement, cb: TapHandler, modifiers?: Modifiers): void;
-export declare function unbindTap(el: HTMLElement, cb: TapHandler): void;
+export declare function unbindTap(el: HTMLElement, cb?: TapHandler): void;

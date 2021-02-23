@@ -100,7 +100,7 @@ export function bindTap(el: HTMLElement, cb: TapHandler, modifiers?: Modifiers) 
     }
 }
 
-export function unbindTap(el: HTMLElement, cb: TapHandler) {
+export function unbindTap(el: HTMLElement, cb?: TapHandler) {
     const elHack = el as HackEl;
 
     if (!elHack._tapEventMap) return;
