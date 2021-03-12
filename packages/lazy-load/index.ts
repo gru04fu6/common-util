@@ -1,3 +1,6 @@
+import { throttle } from '@common-util/utils/factory-util';
+import { getScrollParent } from '@common-util/utils/dom-util';
+
 interface Binding {
     /** 圖片網址 */
     imageUrl: string;
@@ -37,32 +40,6 @@ function lazyLoadFactory(params: {
     */
     let observer: IntersectionObserver | undefined;
 
-    function throttle(fn: (...args: any[]) => void, delay: number) {
-        let timer: number;
-        let prevTime: number;
-
-        return function (this: any, ...args: any[]) {
-            const currTime = Date.now();
-            const context = this;
-
-            if (!prevTime) prevTime = currTime;
-            clearTimeout(timer);
-
-            if (currTime - prevTime > delay) {
-                prevTime = currTime;
-                fn.apply(context, args);
-                clearTimeout(timer);
-                return;
-            }
-
-            timer = window.setTimeout(function () {
-                prevTime = Date.now();
-                timer = 0;
-                fn.apply(context, args);
-            }, delay);
-        };
-    }
-
     /**
      * img載入圖片
      */
@@ -93,7 +70,8 @@ function lazyLoadFactory(params: {
      * 檢查是否需要替換圖片
      */
     function checkReplaceImage(el: HTMLElement): boolean {
-        const bottom = window.scrollY + window.innerHeight;
+        const scrollParent = getScrollParent(el);
+        const bottom = scrollParent.scrollTop + scrollParent.clientHeight;
 
         return bottom > el.offsetTop;
     }
@@ -123,6 +101,7 @@ function lazyLoadFactory(params: {
     /** 爲整個頁面上有設置懶加載屬性的元素加上監聽 */
     function update() {
         const els = document.querySelectorAll(`[${attr}]`);
+
         for (let i = 0; i < els.length; i++) {
             const el = els[i] as HTMLElement;
             if (observer) {
@@ -133,7 +112,7 @@ function lazyLoadFactory(params: {
         }
     }
 
-    if (IntersectionObserver) {
+    if ('IntersectionObserver' in window) {
         observer = new IntersectionObserver(entries => {
             for (let i = 0; i < entries.length; i++) {
                 const item = entries[i];
@@ -148,14 +127,17 @@ function lazyLoadFactory(params: {
 
     /** 綁定監聽懶加載事件 */
     function bindLazyLoad(el: HTMLElement, binding: Binding) {
-        switch (type) {
-            case 'src':
-                (el as HTMLImageElement).src = loadingPath;
-                break;
-            case 'background':
-                el.style.backgroundImage = `url(${loadingPath})`;
-                break;
+        if (loadingPath) {
+            switch (type) {
+                case 'src':
+                    (el as HTMLImageElement).src = loadingPath;
+                    break;
+                case 'background':
+                    el.style.backgroundImage = `url(${loadingPath})`;
+                    break;
+            }
         }
+
         el.setAttribute(attr, binding.imageUrl);
 
         if (observer) {

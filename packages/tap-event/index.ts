@@ -3,15 +3,12 @@ export type TapHandler = (event: MouseEvent | TouchEvent) => void;
 export interface HackEl extends HTMLElement {
     _tapEventMap?: Map<TapHandler, { click?: TapHandler, touchStart?: TapHandler, touchEnd?: TapHandler }>
 }
-
 export interface Modifiers {
     stop?: boolean;
     prevent?: boolean;
     self?: boolean;
     once?: boolean;
 }
-
-const useTouch = 'ontouchend' in document;
 
 function checkTouchEvent<T extends TouchEvent | MouseEvent>(event: T): event is T & TouchEvent {
     return 'touches' in event;
@@ -80,6 +77,7 @@ function createClickEvent(modifiers: Modifiers, cb: TapHandler) {
 }
 
 export function bindTap(el: HTMLElement, cb: TapHandler, modifiers?: Modifiers) {
+    const useTouch = 'ontouchend' in document;
     const elHack = el as HackEl;
 
     if (!elHack._tapEventMap) {

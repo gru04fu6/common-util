@@ -10,3 +10,5 @@ import * as objectUtil from './utils/object-util';
 export { objectUtil };
 import * as factoryUtil from './utils/factory-util';
 export { factoryUtil };
+import * as domUtil from './utils/dom-util';
+export { domUtil };

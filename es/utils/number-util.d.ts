@@ -27,9 +27,9 @@ export declare function formatOdds(num: number | string): string;
 export declare function accMul(arg1: number, arg2: number): number;
 /**
  * 除法
- * @param  {Number} arg1 除數
- * @param  {Number} arg2 被除數
- * @return {Number}      除數 / 被除數
+ * @param  {Number} arg1 被除數
+ * @param  {Number} arg2 除數
+ * @return {Number}      被除數 / 除數
  */
 export declare function accDiv(arg1: number, arg2: number): number;
 /**

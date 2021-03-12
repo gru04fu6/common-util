@@ -1,3 +1,6 @@
+import { throttle } from '../utils/factory-util';
+import { getScrollParent } from '../utils/dom-util';
+
 /**
  * 懶加載
  *
@@ -26,28 +29,6 @@ function lazyLoadFactory(params) {
      * [MDN说明](https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver)
     */
     let observer;
-    function throttle(fn, delay) {
-        let timer;
-        let prevTime;
-        return function (...args) {
-            const currTime = Date.now();
-            const context = this;
-            if (!prevTime)
-                prevTime = currTime;
-            clearTimeout(timer);
-            if (currTime - prevTime > delay) {
-                prevTime = currTime;
-                fn.apply(context, args);
-                clearTimeout(timer);
-                return;
-            }
-            timer = window.setTimeout(function () {
-                prevTime = Date.now();
-                timer = 0;
-                fn.apply(context, args);
-            }, delay);
-        };
-    }
     /**
      * img載入圖片
      */
@@ -76,7 +57,8 @@ function lazyLoadFactory(params) {
      * 檢查是否需要替換圖片
      */
     function checkReplaceImage(el) {
-        const bottom = window.scrollY + window.innerHeight;
+        const scrollParent = getScrollParent(el);
+        const bottom = scrollParent.scrollTop + scrollParent.clientHeight;
         return bottom > el.offsetTop;
     }
     function generateScrollHandler(el) {
@@ -111,7 +93,7 @@ function lazyLoadFactory(params) {
             }
         }
     }
-    if (IntersectionObserver) {
+    if ('IntersectionObserver' in window) {
         observer = new IntersectionObserver(entries => {
             for (let i = 0; i < entries.length; i++) {
                 const item = entries[i];
@@ -125,13 +107,15 @@ function lazyLoadFactory(params) {
     }
     /** 綁定監聽懶加載事件 */
     function bindLazyLoad(el, binding) {
-        switch (type) {
-            case 'src':
-                el.src = loadingPath;
-                break;
-            case 'background':
-                el.style.backgroundImage = `url(${loadingPath})`;
-                break;
+        if (loadingPath) {
+            switch (type) {
+                case 'src':
+                    el.src = loadingPath;
+                    break;
+                case 'background':
+                    el.style.backgroundImage = `url(${loadingPath})`;
+                    break;
+            }
         }
         el.setAttribute(attr, binding.imageUrl);
         if (observer) {

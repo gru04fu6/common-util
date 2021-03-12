@@ -7,6 +7,10 @@ import { clone, forEachObjIndexed } from 'ramda';
  * @param {Any} value 屬性的新值
  */
 function setPropertyByPath(target, path, value) {
+    if (!path) {
+        console.warn('path 不可為空值');
+        return;
+    }
     const pathArray = path.split('.');
     let findTarget = target;
     while (pathArray.length > 1) {
@@ -15,6 +19,10 @@ function setPropertyByPath(target, path, value) {
             findTarget[pathArray[0]] = {};
         }
         findTarget = findTarget[pathArray.shift()];
+        if (!(findTarget instanceof Object)) {
+            console.warn(`屬性 '${pathArray[0]}' 非物件類別`);
+            return;
+        }
     }
     findTarget[pathArray[0]] = value;
 }
@@ -49,7 +57,7 @@ function objHasProperty(obj, prop) {
     return Object.hasOwnProperty.call(obj, prop);
 }
 /**
- * 檢查是不是空物件，檢查成功會把所有可選屬性都變成必須
+ * 檢查是否非空物件，檢查成功會把所有可選屬性都變成必須
  * 但實際上不一定，要注意檢查空值
  * @param obj 物件
  * @return {Boolean}
@@ -58,7 +66,7 @@ function dataIsSet(obj) {
     return Object.keys(obj).length > 0;
 }
 /**
- * 檢查是否為兩層的陣列
+ * 檢查是否為兩層或以上的陣列
  *
  * @param obj 物件
  * @return {Boolean}
@@ -89,11 +97,11 @@ function jsonArrayCovert(jsonString) {
 }
 /**
  * 將物件所有屬性設定為zeroValue，
- * 只會轉換第一層的 `number`、`string`、`boolean`屬性
+ * 只會轉換 `number`、`string`、`boolean`屬性
  * @param obj 物件
  */
-function zeroValueObject(obj) {
-    const newObj = clone(obj);
+function zeroValueObject(obj, needClone = true) {
+    const newObj = needClone ? clone(obj) : obj;
     forEachObjIndexed((value, key) => {
         switch (typeof newObj[key]) {
             case 'number':
@@ -104,6 +112,11 @@ function zeroValueObject(obj) {
                 break;
             case 'boolean':
                 newObj[key] = false;
+                break;
+            case 'object':
+                if (Object.keys(newObj[key]).length) {
+                    newObj[key] = zeroValueObject(newObj[key], false);
+                }
                 break;
         }
     }, newObj);

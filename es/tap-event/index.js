@@ -1,4 +1,3 @@
-const useTouch = 'ontouchend' in document;
 function checkTouchEvent(event) {
     return 'touches' in event;
 }
@@ -49,6 +48,7 @@ function createClickEvent(modifiers, cb) {
     };
 }
 function bindTap(el, cb, modifiers) {
+    const useTouch = 'ontouchend' in document;
     const elHack = el;
     if (!elHack._tapEventMap) {
         elHack._tapEventMap = new Map();

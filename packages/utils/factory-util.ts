@@ -13,21 +13,19 @@ export function throttle(fn: (...args: any[]) => void, delay: number) {
         const currTime = Date.now();
         const context = this;
 
-        if (!prevTime) prevTime = currTime;
-        clearTimeout(timer);
-
-        if (currTime - prevTime > delay) {
-            prevTime = currTime;
-            fn.apply(context, args);
-            clearTimeout(timer);
+        if (prevTime && currTime < prevTime + delay) {
+            if (!timer) {
+                timer = window.setTimeout(function () {
+                    prevTime = Date.now();
+                    timer = 0;
+                    fn.apply(context, args);
+                }, prevTime + delay - currTime);
+            }
             return;
         }
 
-        timer = window.setTimeout(function () {
-            prevTime = Date.now();
-            timer = 0;
-            fn.apply(context, args);
-        }, delay);
+        prevTime = currTime;
+        fn.apply(context, args);
     };
 }
 
@@ -37,12 +35,11 @@ export function throttle(fn: (...args: any[]) => void, delay: number) {
  * @param  {Number}   wait 防抖時間(ms)，即在這段時間內沒有再次執行包裝後函式的話，實際的函式才會執行
  * @return {Function}      包裝後的函式
  */
-export function debounce(fn: (...args: any[]) => void, wait: number) {
+export function debounce(this: any, fn: (...args: any[]) => void, wait: number) {
+    const context = this;
     let timeout: number | undefined;
 
-    return function (this: any, ...args: any[]) {
-        const context = this;
-
+    return function(...args: any[]) {
         clearTimeout(timeout);
         timeout = window.setTimeout(function () {
             timeout = undefined;

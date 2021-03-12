@@ -21,6 +21,7 @@ module.exports = {
     ],
     plugins: ['@typescript-eslint', 'import'],
     rules: {
+        'no-undef': OFF,
         'arrow-body-style': [ERROR, 'as-needed'],
         'arrow-parens': [ERROR, 'as-needed'],
         'comma-dangle': [ERROR, 'never'],

@@ -58,9 +58,9 @@ export function accMul(arg1: number, arg2: number) {
 
 /**
  * 除法
- * @param  {Number} arg1 除數
- * @param  {Number} arg2 被除數
- * @return {Number}      除數 / 被除數
+ * @param  {Number} arg1 被除數
+ * @param  {Number} arg2 除數
+ * @return {Number}      被除數 / 除數
  */
 export function accDiv(arg1: number, arg2: number) {
     let t1 = 0;
@@ -104,5 +104,6 @@ export function bytesTranslate(bytes: number = 0): string {
     ) {
         sizeIndex += 1;
     }
-    return `${accDiv(bytes, 1024 ** sizeIndex).toFixed(2)}${sizes[sizeIndex]}`;
+
+    return `${+accDiv(bytes, 1024 ** sizeIndex).toFixed(2)}${sizes[sizeIndex]}`;
 }

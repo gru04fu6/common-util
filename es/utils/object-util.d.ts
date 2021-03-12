@@ -20,14 +20,14 @@ export declare function getPropertyByPath(target: Record<string, any>, path: str
  */
 export declare function objHasProperty<X extends {}, Y extends PropertyKey>(obj: X, prop: Y): obj is X & Record<Y, unknown>;
 /**
- * 檢查是不是空物件，檢查成功會把所有可選屬性都變成必須
+ * 檢查是否非空物件，檢查成功會把所有可選屬性都變成必須
  * 但實際上不一定，要注意檢查空值
  * @param obj 物件
  * @return {Boolean}
  */
 export declare function dataIsSet<X extends {}>(obj: X): obj is X & Required<X>;
 /**
- * 檢查是否為兩層的陣列
+ * 檢查是否為兩層或以上的陣列
  *
  * @param obj 物件
  * @return {Boolean}
@@ -41,10 +41,10 @@ export declare function isTwoLayArray(array: any[]): array is any[][];
 export declare function jsonArrayCovert<T>(jsonString: string): T[];
 /**
  * 將物件所有屬性設定為zeroValue，
- * 只會轉換第一層的 `number`、`string`、`boolean`屬性
+ * 只會轉換 `number`、`string`、`boolean`屬性
  * @param obj 物件
  */
-export declare function zeroValueObject<T extends Record<string, any>>(obj: T): T;
+export declare function zeroValueObject<T extends Record<string, any>>(obj: T, needClone?: boolean): T;
 /**
  * 測試物件裡所有key的值都是zeroValue
  * 多層物件會一直遞迴找到非 `object` 型態的屬性為止

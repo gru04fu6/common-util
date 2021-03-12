@@ -1,7 +1,7 @@
 {
   "name": "common-util",
   "private": true,
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "常用工具",
   "license": "MIT",
   "bin": {
@@ -9,6 +9,7 @@
   },
   "scripts": {
     "test": "jest",
+    "test:detail": "jest --coverage --verbose",
     "gen": "bash ./scripts/gc.sh",
     "bootstrap": "yarn --frozen-lockfile && npx lerna bootstrap",
     "clean:lib": "rimraf lib && rimraf es",
@@ -19,6 +20,9 @@
   },
   "workspaces": [
     "packages/*"
+  ],
+  "pre-commit": [
+    "test"
   ],
   "dependencies": {
     "@rollup/plugin-commonjs": "^17.1.0",
@@ -38,6 +42,7 @@
     "@babel/preset-typescript": "^7.12.7",
     "@types/body-parser": "^1.19.0",
     "@types/express": "^4.17.11",
+    "@types/jest": "^26.0.20",
     "@types/node": "^14.14.24",
     "@types/ramda": "^0.27.36",
     "@typescript-eslint/eslint-plugin": "^4.14.2",
@@ -48,6 +53,9 @@
     "babel-plugin-module-resolver": "^4.1.0",
     "eslint": "^7.19.0",
     "eslint-plugin-import": "^2.22.1",
+    "intersection-observer": "^0.12.0",
+    "jest": "^26.6.3",
+    "pre-commit": "^1.2.2",
     "rimraf": "^3.0.2",
     "rollup-plugin-css-only": "^3.1.0",
     "rollup-plugin-terser": "^7.0.2",

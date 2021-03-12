@@ -12,6 +12,9 @@ fs.writeFileSync(newIndexPath, newIndex);
 // remove
 fs.rmdirSync(path.resolve(__dirname, '../lib/common-util'), { recursive: true });
 
+// remove test-utils
+fs.rmdirSync(path.resolve(__dirname, '../lib/test-utils'), { recursive: true });
+
 // component
 const libDirPath = path.resolve(__dirname, '../lib');
 fs.readdirSync(libDirPath).forEach(comp => {

@@ -7,14 +7,25 @@ import * as R from 'ramda';
  * @param {Any} value 屬性的新值
  */
 export function setPropertyByPath(target: Record<string, any>, path: string, value: any) {
+    if (!path) {
+        console.warn('path 不可為空值');
+        return;
+    }
+
     const pathArray = path.split('.');
     let findTarget = target;
+
     while (pathArray.length > 1) {
         // 如果路經中間遇到undefined, 就產生空物件
         if (findTarget[pathArray[0]] === undefined) {
             findTarget[pathArray[0]] = {};
         }
         findTarget = findTarget[pathArray.shift()!];
+
+        if (!(findTarget instanceof Object)) {
+            console.warn(`屬性 '${pathArray[0]}' 非物件類別`);
+            return ;
+        }
     }
 
     findTarget[pathArray[0]] = value;
@@ -52,7 +63,7 @@ export function objHasProperty<X extends {}, Y extends PropertyKey>(obj: X, prop
 }
 
 /**
- * 檢查是不是空物件，檢查成功會把所有可選屬性都變成必須
+ * 檢查是否非空物件，檢查成功會把所有可選屬性都變成必須
  * 但實際上不一定，要注意檢查空值
  * @param obj 物件
  * @return {Boolean}
@@ -62,7 +73,7 @@ export function dataIsSet<X extends {}>(obj: X): obj is X & Required<X> {
 }
 
 /**
- * 檢查是否為兩層的陣列
+ * 檢查是否為兩層或以上的陣列
  *
  * @param obj 物件
  * @return {Boolean}
@@ -95,11 +106,11 @@ export function jsonArrayCovert<T>(jsonString: string) {
 
 /**
  * 將物件所有屬性設定為zeroValue，
- * 只會轉換第一層的 `number`、`string`、`boolean`屬性
+ * 只會轉換 `number`、`string`、`boolean`屬性
  * @param obj 物件
  */
-export function zeroValueObject<T extends Record<string, any>>(obj: T): T {
-    const newObj = R.clone(obj);
+export function zeroValueObject<T extends Record<string, any>>(obj: T, needClone = true): T {
+    const newObj = needClone ? R.clone(obj) : obj;
 
     R.forEachObjIndexed((value, key) => {
         switch (typeof newObj[key]) {
@@ -111,6 +122,11 @@ export function zeroValueObject<T extends Record<string, any>>(obj: T): T {
                 break;
             case 'boolean':
                 (newObj[key] as boolean) = false;
+                break;
+            case 'object':
+                if (Object.keys(newObj[key]).length) {
+                    newObj[key] = zeroValueObject(newObj[key], false);
+                }
                 break;
             default:
                 break;
