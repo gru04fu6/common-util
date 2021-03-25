@@ -37,7 +37,7 @@ function startWatch(watchFolder = './mock') {
                 server.close(async () => {
                     const config = await loadConfig();
 
-                    startApp(config);
+                    await startApp(config);
                     lock = false;
                 });
             }
@@ -46,52 +46,55 @@ function startWatch(watchFolder = './mock') {
 }
 
 function startApp(config: UserConfig) {
-    const MockServer = express();
+    return new Promise<void>(resolve => {
+        const MockServer = express();
 
-    MockServer.set('port', config.port);
-    MockServer.use((req: any, res: any, next: any) => {
-        res.header('Access-Control-Allow-Origin', '*');
-        res.header('Access-Control-Allow-Headers', '*');
-        res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS');
-        res.set('Connection', 'close');
-        next();
-    });
-
-    MockServer.use(bodyParser.urlencoded({
-        extended: true,
-        parameterLimit: 10000,
-        limit: 1024 * 1024 * 10
-    }));
-    MockServer.use(bodyParser.json());
-
-    if (config.settingServer) {
-        config.settingServer(MockServer);
-    }
-
-    const routes = express.Router();
-
-    if (config.registerRouter) {
-        config.registerRouter(registerRouterFactory(routes));
-    } else {
-        routes.get('/example', (req, res, next) => setTimeout(() => {
-            res.json({ data: 'example data' });
+        MockServer.set('port', config.port);
+        MockServer.use((req: any, res: any, next: any) => {
+            res.header('Access-Control-Allow-Origin', '*');
+            res.header('Access-Control-Allow-Headers', '*');
+            res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS');
+            res.set('Connection', 'close');
             next();
-        }, 200));
-    }
+        });
 
-    MockServer.use('/', function(req, res, next) {
-        routes(req, res, next);
-    });
+        MockServer.use(bodyParser.urlencoded({
+            extended: true,
+            parameterLimit: 10000,
+            limit: 1024 * 1024 * 10
+        }));
+        MockServer.use(bodyParser.json());
 
-    server = MockServer.listen(MockServer.get('port'), () => {
-        console.log(`Mock server is running at http://localhost:${MockServer.get('port')}`);
+        if (config.settingServer) {
+            config.settingServer(MockServer);
+        }
+
+        const routes = express.Router();
+
+        if (config.registerRouter) {
+            config.registerRouter(registerRouterFactory(routes));
+        } else {
+            routes.get('/example', (req, res, next) => setTimeout(() => {
+                res.json({ data: 'example data' });
+                next();
+            }, 200));
+        }
+
+        MockServer.use('/', function(req, res, next) {
+            routes(req, res, next);
+        });
+
+        server = MockServer.listen(config.port, () => {
+            console.log(`Mock server is running at http://localhost:${config.port}`);
+            resolve();
+        });
     });
 }
 
 export async function cli() {
     const config = await loadConfig();
 
-    startApp(config);
+    await startApp(config);
     startWatch(config.watchDir);
 }
 
