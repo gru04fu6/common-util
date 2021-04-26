@@ -1,9 +1,11 @@
-import type { Router } from 'express';
+import type { Router, Request } from 'express';
+import { ParamsDictionary } from 'express-serve-static-core';
+import { ParsedQs } from 'qs';
 
 export type RegisterRouterFunction = (param: {
     method?: 'get' | 'delete' | 'put' | 'post';
     path: string;
-    reqHandler: (req: any) => any;
+    reqHandler: (req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>) => any;
     time?: number
 }) => void;
 
