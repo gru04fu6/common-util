@@ -3,12 +3,13 @@ import { ParamsDictionary } from 'express-serve-static-core';
 import { ParsedQs } from 'qs';
 
 export type CallbackRequest = Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>;
-export type RegisterRouterFunction = (param: {
+export type RegisterRouterParam = {
     method?: 'get' | 'delete' | 'put' | 'post';
     path: string;
     reqHandler: (req: CallbackRequest) => any;
     time?: number
-}) => void;
+};
+export type RegisterRouterFunction = (param: RegisterRouterParam) => void;
 
 function registerRouterFactory(router: Router) {
     /**
