@@ -176,7 +176,10 @@ function startWatch(watchFolder = './mock') {
         path.resolve(configRoot, 'mock-server.config.js'),
         path.resolve(configRoot, 'mock-server.config.ts'),
         rootFolder
-    ]);
+    ], {
+        persistent: true,
+        ignoreInitial: true
+    });
     console.log(`watch file on folder: ${rootFolder}`);
     watcher.on('ready', function () {
         watcher.on('all', function () {
