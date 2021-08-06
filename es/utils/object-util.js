@@ -1,4 +1,4 @@
-import { clone, forEachObjIndexed } from 'ramda';
+import * as R from 'ramda';
 
 /**
  * 根據路徑設定屬性
@@ -101,8 +101,8 @@ function jsonArrayCovert(jsonString) {
  * @param obj 物件
  */
 function zeroValueObject(obj, needClone = true) {
-    const newObj = needClone ? clone(obj) : obj;
-    forEachObjIndexed((value, key) => {
+    const newObj = needClone ? R.clone(obj) : obj;
+    R.forEachObjIndexed((value, key) => {
         switch (typeof newObj[key]) {
             case 'number':
                 newObj[key] = 0;
@@ -130,7 +130,7 @@ function zeroValueObject(obj, needClone = true) {
  */
 function checkZeroObject(obj, excludeKey = {}) {
     let valid = true;
-    forEachObjIndexed((item, key) => {
+    R.forEachObjIndexed((item, key) => {
         if (objHasProperty(excludeKey, key) && excludeKey[key])
             return;
         if (typeof item === 'object') {

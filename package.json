@@ -1,7 +1,7 @@
 {
   "name": "common-util",
   "private": true,
-  "version": "0.0.24",
+  "version": "0.0.25",
   "description": "常用工具",
   "license": "MIT",
   "bin": {
@@ -32,7 +32,13 @@
     "express": "^4.17.1",
     "ramda": "^0.27.1",
     "rollup": "^2.38.0",
-    "rollup-plugin-typescript2": "^0.29.0"
+    "rollup-plugin-typescript2": "^0.29.0",
+
+    "lodash": "^4.17.21",
+    "glob-parent": "^5.1.2",
+    "ws": "^7.4.6",
+    "browserslist": "^4.16.5",
+    "hosted-git-info": "^2.8.9"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",

@@ -53,7 +53,7 @@ function startApp(config: UserConfig) {
         const MockServer = express();
 
         MockServer.set('port', config.port);
-        MockServer.use((req: any, res: any, next: any) => {
+        MockServer.use((_, res, next) => {
             res.header('Access-Control-Allow-Origin', '*');
             res.header('Access-Control-Allow-Headers', '*');
             res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS');
@@ -77,7 +77,7 @@ function startApp(config: UserConfig) {
         if (config.registerRouter) {
             config.registerRouter(registerRouterFactory(routes));
         } else {
-            routes.get('/example', (req, res, next) => setTimeout(() => {
+            routes.get('/example', (_, res, next) => setTimeout(() => {
                 res.json({ data: 'example data' });
                 next();
             }, 200));

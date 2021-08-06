@@ -92,4 +92,4 @@ const lineClampFactory = (clampValueProp = 'v-line-clamp-value', dotPaddingProp 
     };
 };
 
-export default lineClampFactory;
+export { lineClampFactory as default };
