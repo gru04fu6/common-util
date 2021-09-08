@@ -33,6 +33,7 @@ function toCamelCase(str) {
     return str
         .replace(/[-/]/g, ' ')
         .replace(/\s(.)/g, $1 => $1.toUpperCase())
+        .replace(/_(.)/g, $1 => $1.toUpperCase())
         .replace(/\s/g, '');
 }
 
