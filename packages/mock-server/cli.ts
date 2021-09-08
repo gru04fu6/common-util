@@ -4,14 +4,14 @@ import bodyParser from 'body-parser';
 import chokidar from 'chokidar';
 import path from 'path';
 
-import { resolveConfig, UserConfig }  from './config';
+import { resolveMockServerConfig, MockServerUserConfig }  from './mockServerConfig';
 import registerRouterFactory  from './registerRouter';
 
 let server: Server;
 let lock = false;
 
 function loadConfig() {
-    return resolveConfig({
+    return resolveMockServerConfig({
         port: 3000
     });
 }
@@ -48,7 +48,7 @@ function startWatch(watchFolder = './mock') {
     });
 }
 
-function startApp(config: UserConfig) {
+function startApp(config: MockServerUserConfig) {
     return new Promise<void>(resolve => {
         const MockServer = express();
 
@@ -94,13 +94,10 @@ function startApp(config: UserConfig) {
     });
 }
 
+// eslint-disable-next-line import/prefer-default-export
 export async function cli() {
     const config = await loadConfig();
 
     await startApp(config);
     startWatch(config.watchDir);
 }
-
-
-
-

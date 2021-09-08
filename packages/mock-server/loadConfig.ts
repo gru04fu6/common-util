@@ -6,27 +6,9 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 import typescript from 'rollup-plugin-typescript2';
 import commonjs from '@rollup/plugin-commonjs';
 
-import type { Express } from 'express';
-import type { RegisterRouterFunction } from './registerRouter';
 interface NodeModuleWithCompile extends NodeModule {
     _compile(code: string, filename: string): any
 }
-
-/**
- * 使用者設定
- * @property  {Number=} port MockServer的port號 `default: 3000`
- * @property  {String=} watchDir 需要監聽的資料夾 `default: ./mock`
- * @property  {Function=} settingServer 傳入express app實例，可以在此對express做額外設定
- * @property  {Function=} registerRouter 註冊router
- */
-export interface UserConfig {
-    port?: number;
-    watchDir?: string;
-    settingServer?: (server: Express) => void;
-    registerRouter?: (register: RegisterRouterFunction) => void;
-}
-export type UserConfigFn = () => UserConfig;
-export type UserConfigExport = UserConfig | UserConfigFn;
 
 const debugMode = false;
 function debug(...str: string[]) {
@@ -63,10 +45,10 @@ async function bundleConfigFile(
     return code;
 }
 
-async function loadConfigFromBundledFile(
+async function loadConfigFromBundledFile<T>(
     fileName: string,
     bundledCode: string
-): Promise<UserConfig> {
+): Promise<T> {
     const extension = path.extname(fileName);
     const defaultLoader = require.extensions[extension]!;
     require.extensions[extension] = (module: NodeModule, filename: string) => {
@@ -84,33 +66,34 @@ async function loadConfigFromBundledFile(
     return config;
 }
 
-export function defineConfig(config: UserConfigExport): UserConfigExport {
-    return config;
+function isFunction<T>(fnOrObj: (() => T) | T): fnOrObj is () => T {
+    return typeof fnOrObj === 'function';
 }
 
-export async function resolveConfig(inlineConfig: UserConfig) {
-    const loadResult = await loadConfigFromFile();
+export async function resolveConfig<T>(inlineConfig: T, configName: string, configRoot: string = process.cwd()) {
+    const loadResult = await loadConfigFromFile<T>(configName, configRoot);
 
     const config = Object.assign(inlineConfig, loadResult);
 
     return config;
 }
 
-export async function loadConfigFromFile(
+export async function loadConfigFromFile<T>(
+    configName: string,
     configRoot: string = process.cwd()
-): Promise<UserConfig | null> {
+): Promise<T | null> {
     const start = Date.now();
 
     let resolvedPath: string | undefined;
     let isTS = false;
 
-    const jsconfigFile = path.resolve(configRoot, 'mock-server.config.js');
+    const jsconfigFile = path.resolve(configRoot, `${configName}.js`);
     if (fs.existsSync(jsconfigFile)) {
         resolvedPath = jsconfigFile;
     }
 
     if (!resolvedPath) {
-        const tsconfigFile = path.resolve(configRoot, 'mock-server.config.ts');
+        const tsconfigFile = path.resolve(configRoot, `${configName}.ts`);
         if (fs.existsSync(tsconfigFile)) {
             resolvedPath = tsconfigFile;
             isTS = true;
@@ -123,7 +106,7 @@ export async function loadConfigFromFile(
     }
 
     try {
-        let userConfig: UserConfigExport | undefined;
+        let userConfig: (() => T) | T | undefined;
 
         if (isTS) {
             const code = await bundleConfigFile(resolvedPath);
@@ -150,7 +133,7 @@ export async function loadConfigFromFile(
             }
         }
 
-        const config = typeof userConfig === 'function' ? userConfig() : userConfig;
+        const config = isFunction(userConfig) ? userConfig() : userConfig;
         if (!(config instanceof Object)) {
             throw new Error('config must export or return an object.');
         }

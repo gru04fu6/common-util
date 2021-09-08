@@ -7,14 +7,13 @@ import type { RegisterRouterFunction } from './registerRouter';
  * @property  {Function=} settingServer 傳入express app實例，可以在此對express做額外設定
  * @property  {Function=} registerRouter 註冊router
  */
-export interface UserConfig {
+export interface MockServerUserConfig {
     port?: number;
     watchDir?: string;
     settingServer?: (server: Express) => void;
     registerRouter?: (register: RegisterRouterFunction) => void;
 }
-export declare type UserConfigFn = () => UserConfig;
-export declare type UserConfigExport = UserConfig | UserConfigFn;
-export declare function defineConfig(config: UserConfigExport): UserConfigExport;
-export declare function resolveConfig(inlineConfig: UserConfig): Promise<UserConfig>;
-export declare function loadConfigFromFile(configRoot?: string): Promise<UserConfig | null>;
+export declare type MockServerUserConfigFn = () => MockServerUserConfig;
+export declare type MockServerUserConfigExport = MockServerUserConfig | MockServerUserConfigFn;
+export declare function defineMockServerConfig(config: MockServerUserConfigExport): MockServerUserConfigExport;
+export declare function resolveMockServerConfig(inlineConfig: MockServerUserConfig): Promise<MockServerUserConfig>;
