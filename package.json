@@ -5,7 +5,8 @@
   "description": "常用工具",
   "license": "MIT",
   "bin": {
-    "mock-server": "bin/mock-server.js"
+    "mock-server": "bin/mock-server.js",
+    "gen-mock": "bin/gen-mock.js"
   },
   "scripts": {
     "test": "jest",
