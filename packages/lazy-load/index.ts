@@ -48,6 +48,7 @@ function lazyLoadFactory(params: {
         el.src = el.getAttribute(attr) || '';
         el.onerror = function () {
             el.src = params.errorPath || cache;
+            el.onerror = null;
         };
     }
 
