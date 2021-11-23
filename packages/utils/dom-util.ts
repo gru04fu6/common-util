@@ -1,4 +1,4 @@
-export function getScrollParent(node: HTMLElement): HTMLElement {
+export function getScrollParent(node: HTMLElement): HTMLElement | null {
     const isElement = node instanceof HTMLElement;
     const overflowY = isElement && window.getComputedStyle(node).overflowY;
     const isScrollable = overflowY === 'auto' || overflowY === 'scroll';

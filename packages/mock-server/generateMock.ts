@@ -4,7 +4,7 @@ import path from 'path';
 import { resolveMockApiConfig } from './mockApiConfig';
 
 const walk = (dir, done) => {
-    let results = [];
+    let results: string[] = [];
     fs.readdir(dir, (err, list) => {
         if (err) return done(err);
         let pending = list.length;
@@ -86,7 +86,7 @@ export async function generateMock() {
             const filePath = p.replace(/\.ts$/, '');
             const apiPath = path.relative(mockSrcPath, filePath);
             const registerApiPath = `/${apiPath}`;
-            const formatName = mockApiConfig.changeTypeName[registerApiPath] ? mockApiConfig.changeTypeName[registerApiPath] : apiPath.replace(/api\//, '');
+            const formatName = mockApiConfig.changeTypeName![registerApiPath] ? mockApiConfig.changeTypeName![registerApiPath] : apiPath.replace(/api\//, '');
 
             const typePath = path.relative(generatePath, filePath);
             const typeName = toUpperCamelCase(formatName);
@@ -96,7 +96,7 @@ export async function generateMock() {
             const mockName = toLowerCamelCase(formatName);
             mockImportText += `import ${mockName} from '${mockPath}';\n`;
 
-            const registerMethod = [];
+            const registerMethod: string[] = [];
 
             let tempApiConfig = apiConfig;
             let apiRegexp = new RegExp(`'${registerApiPath}'`, 'g');

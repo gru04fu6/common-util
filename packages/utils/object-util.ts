@@ -1,30 +1,44 @@
 import * as R from 'ramda';
 
+type Join<K, P> = K extends string | number ?
+    P extends string | number ?
+    `${K}${'' extends P ? '' : '.'}${P}`
+        : never : never;
+type Prev = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+    11, 12, 13, 14, 15, 16, 17, 18, 19, 20, ...0[]]
+type Paths<T, D extends number = 5> = [D] extends [never] ? never : T extends Record<string, any> ?
+    { [K in keyof T]-?: K extends string | number ?
+        `${K}` | Join<K, Paths<T[K], Prev[D]>>
+        : never
+    }[keyof T] : ''
+type Leaves<T, D extends number = 5> = [D] extends [never] ? never : T extends Record<string, any> ?
+    { [K in keyof T]-?: Join<K, Leaves<T[K], Prev[D]>> }[keyof T] : '';
+
 /**
  * 根據路徑設定屬性
  * @param {Object} target 設定屬性的目標
  * @param {String} path 屬性的路徑 => 'aaa.bbb.ccc'
  * @param {Any} value 屬性的新值
  */
-export function setPropertyByPath(target: Record<string, any>, path: string, value: any) {
+export function setPropertyByPath<T extends Record<string, any>>(target: T, path: Paths<T>, value: any) {
     if (!path) {
         console.warn('path 不可為空值');
         return;
     }
 
-    const pathArray = path.split('.');
+    const pathArray: Array<keyof T> = path.split('.');
     let findTarget = target;
 
     while (pathArray.length > 1) {
         // 如果路經中間遇到undefined, 就產生空物件
         if (findTarget[pathArray[0]] === undefined) {
-            findTarget[pathArray[0]] = {};
+            findTarget[pathArray[0]] = {} as any;
         }
         findTarget = findTarget[pathArray.shift()!];
 
         if (!(findTarget instanceof Object)) {
             console.warn(`屬性 '${pathArray[0]}' 非物件類別`);
-            return ;
+            return;
         }
     }
 
@@ -37,7 +51,7 @@ export function setPropertyByPath(target: Record<string, any>, path: string, val
  * @param {String} path 屬性的路徑 => 'aaa.bbb.ccc'
  * @return {Any} 取到的屬性值, 若沒取到就是undefined
  */
-export function getPropertyByPath(target: Record<string, any>, path: string) {
+export function getPropertyByPath<T extends Record<string, any>>(target: T, path: Paths<T>): any {
     const pathArray = path.split('.');
     let findTarget = target;
     try {
@@ -58,7 +72,7 @@ export function getPropertyByPath(target: Record<string, any>, path: string) {
  * @param prop key
  * @return {Boolean}
  */
-export function objHasProperty<X extends {}, Y extends PropertyKey>(obj: X, prop: Y): obj is X & Record<Y, unknown> {
+export function objHasProperty<X extends Record<string, any>, Y extends PropertyKey>(obj: X, prop: Y): obj is X & Record<Y, unknown> {
     return Object.hasOwnProperty.call(obj, prop);
 }
 
@@ -68,7 +82,7 @@ export function objHasProperty<X extends {}, Y extends PropertyKey>(obj: X, prop
  * @param obj 物件
  * @return {Boolean}
  */
-export function dataIsSet<X extends {}>(obj: X): obj is X & Required<X> {
+export function dataIsSet<X extends Record<string, any>>(obj: X): obj is X & Required<X> {
     return Object.keys(obj).length > 0;
 }
 

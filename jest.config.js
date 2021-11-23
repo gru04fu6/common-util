@@ -8,25 +8,10 @@ module.exports = {
         }
     },
     testEnvironment: 'jsdom',
+    testPathIgnorePatterns: ['/node_modules/', 'dist'],
+    modulePathIgnorePatterns: ['/node_modules/', 'dist'],
     transform: {
-        '^.+\\.(t|j)sx?$': [
-            'babel-jest', {
-                presets: [
-                    [
-                        '@babel/preset-env',
-                        {
-                            targets: {
-                                node: true
-                            }
-                        }
-                    ],
-                    '@babel/preset-typescript'
-                ],
-                plugins: [
-                    '@babel/plugin-proposal-class-properties'
-                ]
-            }
-        ]
+        '\\.(j|t)s$': '@sucrase/jest-plugin',
     },
     moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
     // u can change this option to a more specific folder for test single component or util when dev

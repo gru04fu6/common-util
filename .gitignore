@@ -2,7 +2,6 @@
 .idea
 node_modules
 .DS_Store
-dist
 *.local
 lerna-debug.json
 lerna-debug.log

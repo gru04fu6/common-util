@@ -72,8 +72,12 @@ function lazyLoadFactory(params: {
      */
     function checkReplaceImage(el: HTMLElement): boolean {
         const scrollParent = getScrollParent(el);
-        const bottom = scrollParent.scrollTop + scrollParent.clientHeight;
 
+        if (!scrollParent) {
+            return false;
+        }
+
+        const bottom = scrollParent.scrollTop + scrollParent.clientHeight;
         return bottom > el.offsetTop;
     }
 

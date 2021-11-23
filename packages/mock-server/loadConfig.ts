@@ -1,9 +1,9 @@
 import fs from 'fs';
 import path from 'path';
-import Rollup from 'rollup';
+import { rollup } from 'rollup';
 
 import { nodeResolve } from '@rollup/plugin-node-resolve';
-import typescript from 'rollup-plugin-typescript2';
+import esbuild from 'rollup-plugin-esbuild';
 import commonjs from '@rollup/plugin-commonjs';
 
 interface NodeModuleWithCompile extends NodeModule {
@@ -20,18 +20,18 @@ function debug(...str: string[]) {
 async function bundleConfigFile(
     fileName: string
 ): Promise<string> {
-    const rollup = require('rollup') as typeof Rollup;
     // node-resolve must be imported since it's bundled
-    const bundle = await rollup.rollup({
+    const bundle = await rollup({
+        input: fileName,
         plugins: [
             nodeResolve(),
             commonjs(),
-            typescript()
+            esbuild({
+                sourceMap: true,
+                target: 'es2018'
+            })
         ],
-        external: (id: string) =>
-            (id[0] !== '.' && !path.isAbsolute(id)) ||
-        id.slice(-5, id.length) === '.json',
-        input: fileName,
+        external: (id: string) => (id[0] !== '.' && !path.isAbsolute(id)) || id.slice(-5, id.length) === '.json',
         treeshake: false
     });
 
@@ -118,7 +118,7 @@ export async function loadConfigFromFile<T>(
                 delete require.cache[require.resolve(resolvedPath)];
                 userConfig = require(resolvedPath);
                 debug(`cjs config loaded in ${Date.now() - start}ms`);
-            } catch (e) {
+            } catch (e: any) {
                 const ignored = new RegExp(
                     [
                         'Cannot use import statement',
@@ -127,7 +127,7 @@ export async function loadConfigFromFile<T>(
                         'Unexpected identifier' // #1635 Node <= 12.4 has no esm detection
                     ].join('|')
                 );
-                if (!ignored.test(e.message)) {
+                if (!ignored.test(e.message as string)) {
                     throw e;
                 }
             }
