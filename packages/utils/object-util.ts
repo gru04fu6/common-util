@@ -1,26 +1,12 @@
 import * as R from 'ramda';
 
-type Join<K, P> = K extends string | number ?
-    P extends string | number ?
-    `${K}${'' extends P ? '' : '.'}${P}`
-        : never : never;
-type Prev = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-    11, 12, 13, 14, 15, 16, 17, 18, 19, 20, ...0[]]
-type Paths<T, D extends number = 5> = [D] extends [never] ? never : T extends Record<string, any> ?
-    { [K in keyof T]-?: K extends string | number ?
-        `${K}` | Join<K, Paths<T[K], Prev[D]>>
-        : never
-    }[keyof T] : ''
-type Leaves<T, D extends number = 5> = [D] extends [never] ? never : T extends Record<string, any> ?
-    { [K in keyof T]-?: Join<K, Leaves<T[K], Prev[D]>> }[keyof T] : '';
-
 /**
  * 根據路徑設定屬性
  * @param {Object} target 設定屬性的目標
  * @param {String} path 屬性的路徑 => 'aaa.bbb.ccc'
  * @param {Any} value 屬性的新值
  */
-export function setPropertyByPath<T extends Record<string, any>>(target: T, path: Paths<T>, value: any) {
+export function setPropertyByPath<T extends Record<string, any>>(target: T, path: string, value: any) {
     if (!path) {
         console.warn('path 不可為空值');
         return;
@@ -51,7 +37,7 @@ export function setPropertyByPath<T extends Record<string, any>>(target: T, path
  * @param {String} path 屬性的路徑 => 'aaa.bbb.ccc'
  * @return {Any} 取到的屬性值, 若沒取到就是undefined
  */
-export function getPropertyByPath<T extends Record<string, any>>(target: T, path: Paths<T>): any {
+export function getPropertyByPath<T extends Record<string, any>>(target: T, path: string): any | undefined {
     const pathArray = path.split('.');
     let findTarget = target;
     try {
