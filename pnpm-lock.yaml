@@ -4,11 +4,6 @@ importers:
 
   .:
     specifiers:
-      '@common-util/lazy-load': workspace:*
-      '@common-util/line-clamp': workspace:*
-      '@common-util/mock-server': workspace:*
-      '@common-util/tap-event': workspace:*
-      '@common-util/utils': workspace:*
       '@pnpm/find-workspace-packages': 3.1.23
       '@pnpm/logger': 4.0.0
       '@pnpm/types': 7.6.0
@@ -56,11 +51,6 @@ importers:
       ts-morph: 12.2.0
       typescript: 4.5.2
     dependencies:
-      '@common-util/lazy-load': link:packages/lazy-load
-      '@common-util/line-clamp': link:packages/line-clamp
-      '@common-util/mock-server': link:packages/mock-server
-      '@common-util/tap-event': link:packages/tap-event
-      '@common-util/utils': link:packages/utils
       '@rollup/plugin-commonjs': 21.0.1_rollup@2.60.1
       '@rollup/plugin-node-resolve': 13.0.6_rollup@2.60.1
       body-parser: 1.19.0
@@ -111,6 +101,11 @@ importers:
 
   packages/common-util:
     specifiers:
+      '@common-util/lazy-load': workspace:*
+      '@common-util/line-clamp': workspace:*
+      '@common-util/mock-server': workspace:*
+      '@common-util/tap-event': workspace:*
+      '@common-util/utils': workspace:*
       '@rollup/plugin-commonjs': ^21.0.1
       '@rollup/plugin-node-resolve': ^13.0.6
       '@types/body-parser': ^1.19.0
@@ -132,12 +127,20 @@ importers:
       rollup: 2.60.1
       rollup-plugin-esbuild: 4.6.0_esbuild@0.13.14+rollup@2.60.1
     devDependencies:
+      '@common-util/lazy-load': link:../lazy-load
+      '@common-util/line-clamp': link:../line-clamp
+      '@common-util/mock-server': link:../mock-server
+      '@common-util/tap-event': link:../tap-event
+      '@common-util/utils': link:../utils
       '@types/body-parser': 1.19.2
       '@types/express': 4.17.13
       '@types/node': 14.17.34
 
   packages/lazy-load:
-    specifiers: {}
+    specifiers:
+      '@common-util/utils': workspace:*
+    devDependencies:
+      '@common-util/utils': link:../utils
 
   packages/line-clamp:
     specifiers: {}
