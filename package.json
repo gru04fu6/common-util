@@ -1,7 +1,7 @@
 {
   "name": "common-util",
   "private": true,
-  "version": "0.0.33",
+  "version": "0.0.34",
   "description": "常用工具",
   "license": "MIT",
   "bin": {
@@ -88,6 +88,22 @@
     "rollup": "^2.60.0",
     "rollup-plugin-esbuild": "4.6.0"
   },
+  "exports": {
+    ".": {
+      "require": "./dist/lib/index.js",
+      "import": "./dist/es/index.mjs"
+    },
+    "./es": "./dist/es/index.mjs",
+    "./lib": "./dist/lib/index.js",
+    "./*": "./dist/*"
+  },
+  "sideEffects": [
+    "dist/*"
+  ],
+  "main": "dist/lib/index.js",
+  "module": "dist/es/index.mjs",
+  "unpkg": "dist/index.full.js",
+  "jsdelivr": "dist/index.full.js",
   "engines": {
     "node": ">= 16"
   },
