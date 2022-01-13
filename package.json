@@ -1,7 +1,8 @@
 {
   "name": "common-util",
   "private": true,
-  "version": "0.0.37",
+  "packageManager": "pnpm@6.25.1",
+  "version": "0.0.38",
   "description": "常用工具",
   "license": "MIT",
   "bin": {
@@ -13,10 +14,11 @@
     "test:detail": "jest --coverage --verbose",
     "dev": "pnpm -C play dev",
     "gen": "bash ./scripts/gc.sh",
-    "clean": "pnpm run clean:lib && pnpm run clean -r --stream",
-    "clean:lib": "rimraf dist",
+    "clean": "pnpm run clean:dist",
+    "clean:dist": "rimraf dist",
     "build": "gulp --require sucrase/register/ts -f build/gulpfile.ts",
-    "mock-server": "node ./bin/mock-server.js"
+    "mock-server": "node ./bin/mock-server.js",
+    "preinstall": "npx only-allow pnpm -y"
   },
   "workspaces": [
     "packages/*"
@@ -43,6 +45,7 @@
     "@pnpm/types": "7.6.0",
     "@rollup/plugin-replace": "3.0.0",
     "@sucrase/jest-plugin": "2.2.0",
+    "@types/fs-extra": "9.0.13",
     "@types/gulp": "4.0.9",
     "@types/jest": "27.0.2",
     "@types/ramda": "^0.27.36",
@@ -60,6 +63,7 @@
     "eslint-plugin-prettier": "4.0.0",
     "expect-type": "0.13.0",
     "fast-glob": "3.2.7",
+    "fs-extra": "10.0.0",
     "gulp": "4.0.2",
     "gulp-typescript": "6.0.0-alpha.1",
     "intersection-observer": "^0.12.0",

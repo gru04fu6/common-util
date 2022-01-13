@@ -1,9 +1,9 @@
-import lineClamp from 'common-util/es/line-clamp';
-import lazyLoad from 'common-util/es/lazy-load';
-import * as tapEvent from 'common-util/es/tap-event';
-import * as numberUtil from 'common-util/es/utils/number-util';
-import * as timeUtil from 'common-util/es/utils/time-util';
-import * as objectUtil from 'common-util/es/utils/object-util';
-import * as factoryUtil from 'common-util/es/utils/factory-util';
-import * as domUtil from 'common-util/es/utils/dom-util';
+import lineClamp from './line-clamp';
+import lazyLoad from './lazy-load';
+import * as tapEvent from './tap-event';
+import * as numberUtil from './utils/number-util';
+import * as timeUtil from './utils/time-util';
+import * as objectUtil from './utils/object-util';
+import * as factoryUtil from './utils/factory-util';
+import * as domUtil from './utils/dom-util';
 export { lineClamp, lazyLoad, tapEvent, numberUtil, timeUtil, objectUtil, factoryUtil, domUtil };

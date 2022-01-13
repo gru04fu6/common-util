@@ -7,7 +7,7 @@ import { bold } from 'chalk';
 import { green, red, yellow } from './utils/log';
 import { buildOutput, cuRoot, pkgRoot, projRoot } from './utils/paths';
 
-import { excludeFiles, pathRewriter } from './utils/pkg';
+import { excludeFiles, pathRewriter2 } from './utils/pkg';
 import type { SourceFile } from 'ts-morph';
 
 const TSCONFIG_PATH = path.resolve(projRoot, 'tsconfig.json');
@@ -16,32 +16,33 @@ const outDir = path.resolve(buildOutput, 'types');
 /**
  * fork = require( https://github.com/egoist/vue-dts-gen/blob/main/src/index.ts
  */
+// eslint-disable-next-line import/prefer-default-export
 export const generateTypesDefinitions = async () => {
     const project = new Project({
         compilerOptions: {
-            allowJs: true,
-            declaration: true,
             emitDeclarationOnly: true,
             noEmitOnError: false,
             outDir,
             baseUrl: projRoot,
             paths: {
                 '@common-util/*': ['packages/*']
-            },
-            skipLibCheck: true
+            }
         },
         tsConfigFilePath: TSCONFIG_PATH,
         skipAddingFilesFromTsConfig: true
     });
 
     const filePaths = excludeFiles(
-        await glob(['**/*.{js,ts}', '!common-util/**/*'], {
+        await glob([
+            '**/*.{js,ts}',
+            '!common-util/**/*'
+        ], {
             cwd: pkgRoot,
             absolute: true,
             onlyFiles: true
         })
     );
-    const epPaths = excludeFiles(
+    const cuPaths = excludeFiles(
         await glob('**/*.{js,ts}', {
             cwd: cuRoot,
             onlyFiles: true
@@ -51,10 +52,12 @@ export const generateTypesDefinitions = async () => {
     const sourceFiles: SourceFile[] = [];
     await Promise.all([
         ...filePaths.map(async file => {
+            console.log(file);
             const sourceFile = project.addSourceFileAtPath(file);
             sourceFiles.push(sourceFile);
         }),
-        ...epPaths.map(async file => {
+        ...cuPaths.map(async file => {
+            console.log(file);
             const content = await fs.readFile(path.resolve(cuRoot, file), 'utf-8');
             sourceFiles.push(
                 project.createSourceFile(path.resolve(pkgRoot, file), content)
@@ -88,7 +91,7 @@ export const generateTypesDefinitions = async () => {
 
             await fs.writeFile(
                 filepath,
-                pathRewriter('esm')(outputFile.getText()),
+                pathRewriter2(outputFile.getText()),
                 'utf8'
             );
 

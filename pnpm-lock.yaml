@@ -11,6 +11,7 @@ importers:
       '@rollup/plugin-node-resolve': ^13.0.6
       '@rollup/plugin-replace': 3.0.0
       '@sucrase/jest-plugin': 2.2.0
+      '@types/fs-extra': 9.0.13
       '@types/gulp': 4.0.9
       '@types/jest': 27.0.2
       '@types/ramda': ^0.27.36
@@ -31,6 +32,7 @@ importers:
       expect-type: 0.13.0
       express: ^4.17.1
       fast-glob: 3.2.7
+      fs-extra: 10.0.0
       gulp: 4.0.2
       gulp-typescript: 6.0.0-alpha.1
       intersection-observer: ^0.12.0
@@ -65,6 +67,7 @@ importers:
       '@pnpm/types': 7.6.0
       '@rollup/plugin-replace': 3.0.0_rollup@2.60.1
       '@sucrase/jest-plugin': 2.2.0
+      '@types/fs-extra': 9.0.13
       '@types/gulp': 4.0.9
       '@types/jest': 27.0.2
       '@types/ramda': 0.27.50
@@ -82,6 +85,7 @@ importers:
       eslint-plugin-prettier: 4.0.0_307f015733298e29da9050ea0cee5b9e
       expect-type: 0.13.0
       fast-glob: 3.2.7
+      fs-extra: 10.0.0
       gulp: 4.0.2
       gulp-typescript: 6.0.0-alpha.1_typescript@4.5.2
       intersection-observer: 0.12.0
@@ -1261,6 +1265,12 @@ packages:
       '@types/express-serve-static-core': 4.17.25
       '@types/qs': 6.9.7
       '@types/serve-static': 1.13.10
+    dev: true
+
+  /@types/fs-extra/9.0.13:
+    resolution: {integrity: sha512-nEnwB++1u5lVDM2UI4c1+5R+FYaKfaAzS4OococimjVm3nQw3TuzH5UNsocrcTBbhnerblyHj4A49qXbIiZdpA==}
+    dependencies:
+      '@types/node': 16.11.9
     dev: true
 
   /@types/glob-stream/6.1.1:
@@ -3978,6 +3988,15 @@ packages:
     engines: {node: '>= 0.6'}
     dev: false
 
+  /fs-extra/10.0.0:
+    resolution: {integrity: sha512-C5owb14u9eJwizKGdchcDUQeFtlSHHthBk8pbX9Vc1PFZrLombudjDnNns88aYslCyF6IY5SUw3Roz6xShcEIQ==}
+    engines: {node: '>=12'}
+    dependencies:
+      graceful-fs: 4.2.8
+      jsonfile: 6.1.0
+      universalify: 2.0.0
+    dev: true
+
   /fs-extra/8.1.0:
     resolution: {integrity: sha512-yhlQgA6mnOJUKOsRUFsgJdQCvkKhcz8tlZG5HBQfReYZy46OwLcY+Zia0mtdHsOo9y/hP+CxMN0TU9QxoOtG4g==}
     engines: {node: '>=6 <7 || >=8'}
@@ -5629,6 +5648,14 @@ packages:
 
   /jsonfile/4.0.0:
     resolution: {integrity: sha1-h3Gq4HmbZAdrdmQPygWPnBDjPss=}
+    optionalDependencies:
+      graceful-fs: 4.2.8
+    dev: true
+
+  /jsonfile/6.1.0:
+    resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
+    dependencies:
+      universalify: 2.0.0
     optionalDependencies:
       graceful-fs: 4.2.8
     dev: true
@@ -8456,6 +8483,11 @@ packages:
   /universalify/0.1.2:
     resolution: {integrity: sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==}
     engines: {node: '>= 4.0.0'}
+    dev: true
+
+  /universalify/2.0.0:
+    resolution: {integrity: sha512-hAZsKq7Yy11Zu1DE0OzWjw7nnLZmJZYTDZZyEFHZdUhV8FkH5MCfoU1XMaxXovpyW5nq5scPqq0ZDP9Zyl04oQ==}
+    engines: {node: '>= 10.0.0'}
     dev: true
 
   /unpipe/1.0.0:

@@ -33,6 +33,11 @@ export const pathRewriter = (module: Module) => {
     };
 };
 
+export const pathRewriter2 = (id: string) => {
+    let _id = id.replaceAll(`${CU_PREFIX}/`, './');
+    return _id;
+};
+
 export const excludeFiles = (files: string[]) => {
     const excludes = ['node_modules', 'test', 'gulpfile', 'dist'];
     return files.filter(
