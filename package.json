@@ -2,7 +2,7 @@
   "name": "common-util",
   "private": true,
   "packageManager": "pnpm@6.25.1",
-  "version": "0.0.38",
+  "version": "0.0.39",
   "description": "常用工具",
   "license": "MIT",
   "bin": {
@@ -17,8 +17,7 @@
     "clean": "pnpm run clean:dist",
     "clean:dist": "rimraf dist",
     "build": "gulp --require sucrase/register/ts -f build/gulpfile.ts",
-    "mock-server": "node ./bin/mock-server.js",
-    "preinstall": "npx only-allow pnpm -y"
+    "mock-server": "node ./bin/mock-server.js"
   },
   "workspaces": [
     "packages/*"
