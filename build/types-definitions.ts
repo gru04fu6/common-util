@@ -52,12 +52,10 @@ export const generateTypesDefinitions = async () => {
     const sourceFiles: SourceFile[] = [];
     await Promise.all([
         ...filePaths.map(async file => {
-            console.log(file);
             const sourceFile = project.addSourceFileAtPath(file);
             sourceFiles.push(sourceFile);
         }),
         ...cuPaths.map(async file => {
-            console.log(file);
             const content = await fs.readFile(path.resolve(cuRoot, file), 'utf-8');
             sourceFiles.push(
                 project.createSourceFile(path.resolve(pkgRoot, file), content)
@@ -82,6 +80,8 @@ export const generateTypesDefinitions = async () => {
             red(`Emit no file: ${bold(relativePath)}`);
             return;
         }
+        const fileToPkgPath = path.relative(path.dirname(sourceFile.getFilePath()), pkgRoot);
+        console.log(sourceFile.getFilePath(), fileToPkgPath);
 
         const subTasks = emitFiles.map(async outputFile => {
             const filepath = outputFile.getFilePath();
@@ -91,7 +91,7 @@ export const generateTypesDefinitions = async () => {
 
             await fs.writeFile(
                 filepath,
-                pathRewriter2(outputFile.getText()),
+                pathRewriter2(outputFile.getText(), fileToPkgPath),
                 'utf8'
             );
 

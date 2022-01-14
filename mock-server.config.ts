@@ -1,4 +1,4 @@
-import { defineMockServerConfig } from './dist/common-util/es/mock-server';
+import { defineMockServerConfig } from './dist/es/mock-server';
 
 export default defineMockServerConfig({
     port: 3030,
@@ -6,7 +6,7 @@ export default defineMockServerConfig({
     registerRouter(registerRouter) {
         registerRouter({
             path: '/abc',
-            reqHandler: (req) => ({ abc: 'abc' })
+            reqHandler: req => ({ abc: 'abc' })
         });
     }
 });

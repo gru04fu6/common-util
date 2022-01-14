@@ -33,8 +33,8 @@ export const pathRewriter = (module: Module) => {
     };
 };
 
-export const pathRewriter2 = (id: string) => {
-    let _id = id.replaceAll(`${CU_PREFIX}/`, './');
+export const pathRewriter2 = (id: string, path: string) => {
+    let _id = id.replaceAll(`${CU_PREFIX}/`, `${path || '.'}/`);
     return _id;
 };
 
