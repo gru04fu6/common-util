@@ -100,7 +100,7 @@ export async function generateMock() {
             const textScope = '[\'`"]';
 
             let tempApiConfig = apiConfig;
-            let apiRegexp = new RegExp(`${textScope}.*?${registerApiPath}.*?${textScope}`, 'g');
+            let apiRegexp = new RegExp(`${textScope}${registerApiPath}${textScope}`, 'g');
             let methodRegexp = new RegExp(`method:.*?${textScope}(.*?)${textScope}`, 'g');
 
             while(apiRegexp.exec(tempApiConfig)) {
@@ -108,7 +108,7 @@ export async function generateMock() {
 
                 const methodResult = methodRegexp.exec(tempApiConfig);
                 if (methodResult) {
-                    registerMethod.push(methodResult[2]);
+                    registerMethod.push(methodResult[1]);
                 }
 
                 methodRegexp.exec('');
