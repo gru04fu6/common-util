@@ -13,7 +13,7 @@ function setPropertyByPath(target, path, value) {
     }
     findTarget = findTarget[pathArray.shift()];
     if (!(findTarget instanceof Object)) {
-      console.warn(`\u5C6C\u6027 '${pathArray[0]}' \u975E\u7269\u4EF6\u985E\u5225`);
+      console.warn(`\u5C6C\u6027 '${String(pathArray[0])}' \u975E\u7269\u4EF6\u985E\u5225`);
       return;
     }
   }
@@ -94,6 +94,13 @@ function checkZeroObject(obj, excludeKey = {}) {
   }, obj);
   return valid;
 }
+function setValueByStruct(structObject, source) {
+  Object.keys(structObject).forEach((key) => {
+    if (objHasProperty(source, key)) {
+      structObject[key] = source[key];
+    }
+  });
+}
 
-export { checkZeroObject, dataIsSet, getPropertyByPath, isTwoLayArray, jsonArrayCovert, objHasProperty, setPropertyByPath, zeroValueObject };
+export { checkZeroObject, dataIsSet, getPropertyByPath, isTwoLayArray, jsonArrayCovert, objHasProperty, setPropertyByPath, setValueByStruct, zeroValueObject };
 //# sourceMappingURL=object-util.mjs.map

@@ -208,15 +208,26 @@ importers:
 
   packages/lazy-load:
     devDependencies:
+      '@common-util/test-utils':
+        specifier: workspace:*
+        version: link:../test-utils
       '@common-util/utils':
         specifier: workspace:*
         version: link:../utils
 
-  packages/line-clamp: {}
+  packages/line-clamp:
+    devDependencies:
+      '@common-util/test-utils':
+        specifier: workspace:*
+        version: link:../test-utils
 
   packages/mock-server: {}
 
-  packages/tap-event: {}
+  packages/tap-event:
+    devDependencies:
+      '@common-util/test-utils':
+        specifier: workspace:*
+        version: link:../test-utils
 
   packages/test-utils: {}
 
@@ -225,6 +236,10 @@ importers:
       ramda:
         specifier: ^0.27.1
         version: 0.27.1
+    devDependencies:
+      '@common-util/test-utils':
+        specifier: workspace:*
+        version: link:../test-utils
 
 packages:
 
@@ -5114,7 +5129,7 @@ packages:
     dev: true
 
   /isexe@2.0.0:
-    resolution: {integrity: sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=}
+    resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
     dev: true
 
   /isobject@2.1.0:

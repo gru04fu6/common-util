@@ -23,7 +23,7 @@ export function setPropertyByPath<T extends Record<string, any>>(target: T, path
         findTarget = findTarget[pathArray.shift()!];
 
         if (!(findTarget instanceof Object)) {
-            console.warn(`屬性 '${pathArray[0]}' 非物件類別`);
+            console.warn(`屬性 '${String(pathArray[0])}' 非物件類別`);
             return;
         }
     }
@@ -158,4 +158,15 @@ export function checkZeroObject<T extends Record<string, any>>(obj: T, excludeKe
     }, obj);
 
     return valid;
+}
+
+/**
+ * 將另一個物件中與自己相同的key的值覆蓋回來
+ */
+export function setValueByStruct(structObject: Record<string, any>, source: Record<string, any>) {
+    Object.keys(structObject).forEach(key => {
+        if (objHasProperty(source, key)) {
+            structObject[key] = source[key];
+        }
+    });
 }

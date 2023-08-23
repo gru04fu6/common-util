@@ -5,10 +5,13 @@
  * @return {String}            格式化結果
  */
 export function formatMoney(num: string | number = 0, hasSymbol = false) {
-    if (Number.isNaN(+num)) { return num as string; }
-    const symbol = +num > 0 ? '+' : '';
-    const number = `${num}`.split('.');
-    return `${hasSymbol ? symbol : ''}${`${number[0]}`.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}${number[1] ? `.${number[1]}` : ''}`;
+    if (Number.isNaN(+num)) return `${num}`;
+
+    const symbol = +num > 0 && hasSymbol ? '+' : '';
+    const [integerText = '', decimalText = ''] = `${num}`.split('.');
+    const dotText = decimalText ? '.' : '';
+
+    return `${symbol}${integerText.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}${dotText}${decimalText}`;
 }
 
 /**
@@ -17,16 +20,15 @@ export function formatMoney(num: string | number = 0, hasSymbol = false) {
  * @param  {boolean} hasSymbol 是否有正號
  * @return {String}            格式化結果
  */
-export function formatMoneyFixedTwo(value: string | number) {
-    if (Number.isNaN(+value)) { return value; }
+export function formatMoneyFixedTwo(num: string | number) {
+    if (Number.isNaN(+num)) return `${num}`;
 
-    const decimal = `${value}`.split('.')[1] || '';
-
+    const decimal = `${num}`.split('.')[1] || '';
     if (decimal.length < 2) {
-        return formatMoney((+value).toFixed(2));
+        return formatMoney(numberFormat(num, 2));
     }
 
-    return formatMoney(value);
+    return formatMoney(num);
 }
 
 /**
@@ -35,8 +37,78 @@ export function formatMoneyFixedTwo(value: string | number) {
  * @return {String}            格式化結果
  */
 export function formatOdds(num: number | string) {
-    if (typeof num === 'string') { return num; }
+    if (Number.isNaN(+num)) return `${num}`;
+    if (typeof num === 'string') return num;
+
     return num.toFixed(2);
+}
+
+/**
+ * 小數點到特定位數
+ */
+export function numberDecimal(num: string | number, decimal = 2) {
+    if (Number.isNaN(+num)) return `${num}`;
+    return (+num).toFixed(decimal);
+}
+
+/**
+ * 數字格式化，三位一撇+小數點到特定位數
+ */
+export function numberFormat(num?: string | number, decimal = 2) {
+    if (num === null || num === undefined || num === '') return '';
+    return formatMoney(numberDecimal(num, decimal));
+}
+
+/**
+ * 將數值轉成百分比
+ * @param decimal 補到小數點後第幾位, default: 2
+ * @example 0.982 => 98.2
+ */
+export function formatPercent(num: string | number, decimal = 2) {
+    const percentNumber = accMul(+num, 100);
+    return numberFormat(percentNumber, decimal);
+}
+
+/**
+ * 檢查是不是百分比文字，若是的話將百分號拿掉
+ */
+export function maybePercentText(text: string | number) {
+    const percentText = `${text}`;
+    const percentRegResult = /^(-?[\d]*(\.[\d]+)?)%$/.exec(percentText);
+
+    if (!percentRegResult) {
+        return {
+            text: percentText,
+            isPercent: false
+        };
+    }
+
+    return {
+        text: percentRegResult[1],
+        isPercent: true
+    };
+}
+
+/**
+ * 基本的排序方法
+ */
+export function baseSorter(a: string | number, b: string | number, order: 'descend' | 'ascend' = 'ascend') {
+    let result = 0;
+
+    if (typeof a === 'number' && typeof b === 'number') {
+        result = a - b;
+    } else {
+        const _a = maybePercentText(a).text;
+        const _b = maybePercentText(b).text;
+
+        const aValue = isNaN(+_a) ? a : +_a;
+        const bValue = isNaN(+_b) ? b : +_b;
+
+        if (aValue < bValue) result = -1;
+        if (aValue > bValue) result = 1;
+    }
+
+    return order === 'ascend' ? result : -result;
 }
 
 /**

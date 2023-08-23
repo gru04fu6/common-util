@@ -2,7 +2,7 @@
   "name": "common-util",
   "private": true,
   "packageManager": "pnpm@6.25.1",
-  "version": "0.0.42",
+  "version": "0.0.43",
   "description": "常用工具",
   "license": "MIT",
   "bin": {

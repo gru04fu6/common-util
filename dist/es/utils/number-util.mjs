@@ -1,26 +1,70 @@
 function formatMoney(num = 0, hasSymbol = false) {
-  if (Number.isNaN(+num)) {
-    return num;
-  }
-  const symbol = +num > 0 ? "+" : "";
-  const number = `${num}`.split(".");
-  return `${hasSymbol ? symbol : ""}${`${number[0]}`.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}${number[1] ? `.${number[1]}` : ""}`;
+  if (Number.isNaN(+num))
+    return `${num}`;
+  const symbol = +num > 0 && hasSymbol ? "+" : "";
+  const [integerText = "", decimalText = ""] = `${num}`.split(".");
+  const dotText = decimalText ? "." : "";
+  return `${symbol}${integerText.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}${dotText}${decimalText}`;
 }
-function formatMoneyFixedTwo(value) {
-  if (Number.isNaN(+value)) {
-    return value;
-  }
-  const decimal = `${value}`.split(".")[1] || "";
+function formatMoneyFixedTwo(num) {
+  if (Number.isNaN(+num))
+    return `${num}`;
+  const decimal = `${num}`.split(".")[1] || "";
   if (decimal.length < 2) {
-    return formatMoney((+value).toFixed(2));
+    return formatMoney(numberFormat(num, 2));
   }
-  return formatMoney(value);
+  return formatMoney(num);
 }
 function formatOdds(num) {
-  if (typeof num === "string") {
+  if (Number.isNaN(+num))
+    return `${num}`;
+  if (typeof num === "string")
     return num;
-  }
   return num.toFixed(2);
+}
+function numberDecimal(num, decimal = 2) {
+  if (Number.isNaN(+num))
+    return `${num}`;
+  return (+num).toFixed(decimal);
+}
+function numberFormat(num, decimal = 2) {
+  if (num === null || num === void 0 || num === "")
+    return "";
+  return formatMoney(numberDecimal(num, decimal));
+}
+function formatPercent(num, decimal = 2) {
+  const percentNumber = accMul(+num, 100);
+  return numberFormat(percentNumber, decimal);
+}
+function maybePercentText(text) {
+  const percentText = `${text}`;
+  const percentRegResult = /^(-?[\d]*(\.[\d]+)?)%$/.exec(percentText);
+  if (!percentRegResult) {
+    return {
+      text: percentText,
+      isPercent: false
+    };
+  }
+  return {
+    text: percentRegResult[1],
+    isPercent: true
+  };
+}
+function baseSorter(a, b, order = "ascend") {
+  let result = 0;
+  if (typeof a === "number" && typeof b === "number") {
+    result = a - b;
+  } else {
+    const _a = maybePercentText(a).text;
+    const _b = maybePercentText(b).text;
+    const aValue = isNaN(+_a) ? a : +_a;
+    const bValue = isNaN(+_b) ? b : +_b;
+    if (aValue < bValue)
+      result = -1;
+    if (aValue > bValue)
+      result = 1;
+  }
+  return order === "ascend" ? result : -result;
 }
 function accMul(arg1, arg2) {
   let pow = 0;
@@ -72,5 +116,5 @@ function bytesTranslate(bytes = 0) {
   return `${+accDiv(bytes, 1024 ** sizeIndex).toFixed(2)}${sizes[sizeIndex]}`;
 }
 
-export { accDiv, accMul, bytesTranslate, formatMoney, formatMoneyFixedTwo, formatOdds, sizeTransToBytes };
+export { accDiv, accMul, baseSorter, bytesTranslate, formatMoney, formatMoneyFixedTwo, formatOdds, formatPercent, maybePercentText, numberDecimal, numberFormat, sizeTransToBytes };
 //# sourceMappingURL=number-util.mjs.map

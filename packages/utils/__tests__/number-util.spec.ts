@@ -62,6 +62,115 @@ describe('number-util', () => {
         });
     });
 
+    describe('numberDecimal 小數點到特定位數', () => {
+        test('整數 => 轉成二位', () => {
+            const test = numberUtil.numberDecimal(1234567, 2);
+            expect(test).toBe('1234567.00');
+        });
+
+        test('小數點一位 => 轉成二位', () => {
+            const test = numberUtil.numberDecimal(1234567.2, 2);
+            expect(test).toBe('1234567.20');
+        });
+
+        test('小數點三位 => 轉成二位', () => {
+            const test = numberUtil.numberDecimal(1234567.366, 2);
+            expect(test).toBe('1234567.37');
+        });
+    });
+
+    describe('numberFormat 數字格式化，三位一撇+小數點到特定位數', () => {
+        test('傳NaN', () => {
+            const test = numberUtil.numberFormat('abc', 2);
+            expect(test).toBe('abc');
+        });
+
+        test('整數 => 轉成二位', () => {
+            const test = numberUtil.numberFormat(1234567, 2);
+            expect(test).toBe('1,234,567.00');
+        });
+
+        test('小數點一位 => 轉成二位', () => {
+            const test = numberUtil.numberFormat(1234567.2, 2);
+            expect(test).toBe('1,234,567.20');
+        });
+
+        test('小數點三位 => 轉成二位', () => {
+            const test = numberUtil.numberFormat(1234567.366, 2);
+            expect(test).toBe('1,234,567.37');
+        });
+    });
+
+    describe('formatPercent 將數值轉成百分比', () => {
+        test('二位小數', () => {
+            const test = numberUtil.formatPercent(0.7632, 2);
+            expect(test).toBe('76.32');
+        });
+
+        test('一位小數', () => {
+            const test = numberUtil.formatPercent(0.7632, 1);
+            expect(test).toBe('76.3');
+        });
+    });
+
+    describe('maybePercentText 檢查是不是百分比文字，若是的話將百分號拿掉', () => {
+        test('是百分比文字', () => {
+            const testResult = numberUtil.maybePercentText('35.4%');
+
+            expect(testResult.isPercent).toBe(true);
+            expect(testResult.text).toBe('35.4');
+        });
+
+        test('不是是百分比文字', () => {
+            const testResult = numberUtil.maybePercentText('abc');
+
+            expect(testResult.isPercent).toBe(false);
+            expect(testResult.text).toBe('abc');
+        });
+    });
+
+    describe('baseSorter 基本的排序方法', () => {
+        test('asc', () => {
+            const test1 = [3, 2, 1];
+            test1.sort((a, b) => numberUtil.baseSorter(a, b, 'ascend'));
+
+            const test2 = ['c', 'b', 'a'];
+            test2.sort((a, b) => numberUtil.baseSorter(a, b, 'ascend'));
+
+            const test3 = ['3%', '2%', '1%'];
+            test3.sort((a, b) => numberUtil.baseSorter(a, b, 'ascend'));
+
+            const test4 = ['2023-01-03', '2023-01-02', '2023-01-01'];
+            test4.sort((a, b) => numberUtil.baseSorter(a, b, 'ascend'));
+
+            expect(test1[0]).toBe(1);
+            expect(test2[0]).toBe('a');
+            expect(test3[0]).toBe('1%');
+            expect(test4[0]).toBe('2023-01-01');
+        });
+
+        test('desc', () => {
+            const test1 = [1, 2, 3];
+            test1.sort((a, b) => numberUtil.baseSorter(a, b, 'descend'));
+
+            const test2 = ['a', 'b', 'c'];
+            test2.sort((a, b) => numberUtil.baseSorter(a, b, 'descend'));
+
+            const test3 = ['1%', '2%', '3%'];
+            test3.sort((a, b) => numberUtil.baseSorter(a, b, 'descend'));
+
+            const test4 = ['2023-01-01', '2023-01-02', '2023-01-03'];
+            test4.sort((a, b) => numberUtil.baseSorter(a, b, 'descend'));
+
+            expect(test1[2]).toBe(1);
+            expect(test2[2]).toBe('a');
+            expect(test3[2]).toBe('1%');
+            expect(test4[2]).toBe('2023-01-01');
+        });
+
+
+    });
+
     describe('accMul 乘法', () => {
         test('0.1 * 0.2', () => {
             const test = numberUtil.accMul(0.1, 0.2);

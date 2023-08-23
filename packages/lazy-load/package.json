@@ -4,6 +4,7 @@
   "main": "dist/index.js",
   "license": "MIT",
   "devDependencies": {
-    "@common-util/utils": "workspace:*"
+    "@common-util/utils": "workspace:*",
+    "@common-util/test-utils": "workspace:*"
   }
 }

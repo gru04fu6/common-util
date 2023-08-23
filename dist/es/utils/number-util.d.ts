@@ -11,13 +11,38 @@ export declare function formatMoney(num?: string | number, hasSymbol?: boolean):
  * @param  {boolean} hasSymbol 是否有正號
  * @return {String}            格式化結果
  */
-export declare function formatMoneyFixedTwo(value: string | number): string | number;
+export declare function formatMoneyFixedTwo(num: string | number): string;
 /**
  * 小數點到第二位
  * @param  {Number|String} num 欲格式化的數字
  * @return {String}            格式化結果
  */
 export declare function formatOdds(num: number | string): string;
+/**
+ * 小數點到特定位數
+ */
+export declare function numberDecimal(num: string | number, decimal?: number): string;
+/**
+ * 數字格式化，三位一撇+小數點到特定位數
+ */
+export declare function numberFormat(num?: string | number, decimal?: number): string;
+/**
+ * 將數值轉成百分比
+ * @param decimal 補到小數點後第幾位, default: 2
+ * @example 0.982 => 98.2
+ */
+export declare function formatPercent(num: string | number, decimal?: number): string;
+/**
+ * 檢查是不是百分比文字，若是的話將百分號拿掉
+ */
+export declare function maybePercentText(text: string | number): {
+    text: string;
+    isPercent: boolean;
+};
+/**
+ * 基本的排序方法
+ */
+export declare function baseSorter(a: string | number, b: string | number, order?: 'descend' | 'ascend'): number;
 /**
  * 乘法
  * @param  {Number} arg1 乘數1

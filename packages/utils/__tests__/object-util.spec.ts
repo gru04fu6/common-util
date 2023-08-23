@@ -144,4 +144,23 @@ describe('object-util', () => {
             expect(objectUtil.checkZeroObject(testObject, { 'a': true })).toBe(true);
         });
     });
+
+    describe('setValueByStruct 將另一個物件中與自己相同的key的值覆蓋回來', () => {
+        test('正確覆蓋', () => {
+            const testObject = {
+                a: 1,
+                b: '1',
+                c: 'c'
+            };
+            const testObject2 = {
+                a: 2,
+                d: '5'
+            };
+
+            objectUtil.setValueByStruct(testObject, testObject2);
+
+            expect(testObject.a).toBe(2);
+            expect(Object.hasOwnProperty.call(testObject, 'd')).toBe(false);
+        });
+    });
 });

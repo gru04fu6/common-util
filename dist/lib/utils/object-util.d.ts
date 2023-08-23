@@ -52,3 +52,7 @@ export declare function zeroValueObject<T extends Record<string, any>>(obj: T, n
  * @param excludeKey 要跳過檢查的key
  */
 export declare function checkZeroObject<T extends Record<string, any>>(obj: T, excludeKey?: Record<string, boolean>): boolean;
+/**
+ * 將另一個物件中與自己相同的key的值覆蓋回來
+ */
+export declare function setValueByStruct(structObject: Record<string, any>, source: Record<string, any>): void;
