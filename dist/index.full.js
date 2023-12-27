@@ -413,8 +413,8 @@
       } else {
         const _a = maybePercentText(a).text;
         const _b = maybePercentText(b).text;
-        const aValue = isNaN(+_a) ? a : +_a;
-        const bValue = isNaN(+_b) ? b : +_b;
+        const aValue = isNaN(+_a) || _a === "" ? a : +_a;
+        const bValue = isNaN(+_b) || _b === "" ? b : +_b;
         if (aValue < bValue)
           result = -1;
         if (aValue > bValue)
